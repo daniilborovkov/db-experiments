@@ -126,6 +126,15 @@ function db_experiments_scripts() {
 
 	wp_enqueue_script( 'db-experiments-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20151215', true );
 
+	wp_enqueue_script( 'db-experiments-load-more', get_template_directory_uri() . '/js/load-more.js' , array('jquery'), '2018', true );
+
+	wp_localize_script( 'db-experiments-load-more', 'db_experiments_load_more', array(
+		'ajaxurl' => site_url() . '/wp-admin/admin-ajax.php', // WordPress AJAX
+		'posts' => json_encode( $wp_query->query_vars ), // everything about your loop is here
+		'current_page' => get_query_var( 'paged' ) ? get_query_var('paged') : 1,
+		'max_page' => $wp_query->max_num_pages
+	) );
+
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
 	}
